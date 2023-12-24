@@ -4,12 +4,14 @@ import { useSocket } from "@/context/socket";
 import usePeer from "@/hooks/usePeer";
 import useMediaStream from "@/hooks/useMediaStream";
 import usePlayer from "@/hooks/usePlayer";
+import styles from "@/styles/room.module.css";
 
 const Room = () => {
 	const socket = useSocket();
 	const { peer, myId } = usePeer();
 	const { stream } = useMediaStream();
-	const { players, setPlayers } = usePlayer();
+	const { players, setPlayers, playerHighlighted, nonHighlightedPlayers } =
+		usePlayer(myId);
 
 	useEffect(() => {
 		if (!socket || !peer || !socket) return;
@@ -68,14 +70,32 @@ const Room = () => {
 	}, [myId, setPlayers, stream]);
 
 	return (
-		<div>
-			{Object.keys(players).map((playerId) => {
-				const { url, muted, playing } = players[playerId];
-				return (
-					<Player key={playerId} url={url} muted={muted} playing={playing} />
-				);
-			})}
-		</div>
+		<>
+			<div className={styles.activePlayerContainer}>
+				{playerHighlighted && (
+					<Player
+						url={playerHighlighted.url}
+						muted={playerHighlighted.muted}
+						playing={playerHighlighted.playing}
+						isActive
+					/>
+				)}
+			</div>
+			<div className={styles.inActivePlayerContainer}>
+				{Object.keys(nonHighlightedPlayers).map((playerId) => {
+					const { url, muted, playing } = nonHighlightedPlayers[playerId];
+					return (
+						<Player
+							key={playerId}
+							url={url}
+							muted={muted}
+							playing={playing}
+							isActive={false}
+						/>
+					);
+				})}
+			</div>
+		</>
 	);
 };
 
