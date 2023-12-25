@@ -1,4 +1,4 @@
-const { useState, useEffect, useRef } = require("react");
+import { useState, useEffect, useRef } from "react";
 
 const useMediaStream = () => {
 	const [state, setState] = useState(null);
@@ -20,8 +20,10 @@ const useMediaStream = () => {
 			}
 		})();
 	}, []);
+
 	return {
 		stream: state,
 	};
 };
+
 export default useMediaStream;

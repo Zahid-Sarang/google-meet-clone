@@ -1,0 +1,14 @@
+.bottomMenu {
+	@apply absolute left-0 right-0 flex justify-between mx-auto bottom-5;
+	width: 300px;
+}
+
+.bottomMenu .icon {
+	@apply p-4 text-white rounded-full cursor-pointer;
+	background-color: theme("colors.secondary");
+
+	:hover,
+	&.active {
+		background-color: theme("colors.buttonPrimary");
+	}
+}
